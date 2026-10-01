@@ -229,5 +229,4 @@ recruitment-platform/
 - A loading indicator is shown for every request.
 - Success and error messages appear as toasts in plain language; raw server errors are never shown.
 - Buttons are disabled while a request is running to prevent double submissions.
-- Empty lists show a short message, for example when a society has no applicants.#   T r a v e l M a t e  
- 
+- Empty lists show a short message, for example when a society has no applicants.
