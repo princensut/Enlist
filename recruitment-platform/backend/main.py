@@ -30,17 +30,16 @@ env_origins = [
 ]
 
 app.add_middleware(
+    
     CORSMiddleware,
     allow_origins=[
         "https://enlist-frontend.vercel.app",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        *env_origins,
     ],
-    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
-    allow_methods=[ALL],
-    allow_headers=[ALL],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Accept"],
 )
 
 
