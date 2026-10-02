@@ -18,14 +18,13 @@ app = FastAPI(
 # CORS
 # ============================================================
 
-ALLOWED_ORIGINS = [
-    "https://enlist-frontend.vercel.app",
-    "http://localhost:5173",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origins=[
+        "https://enlist-frontend.vercel.app",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -33,24 +32,24 @@ app.add_middleware(
 
 
 # ============================================================
-# Global Exception Handler
+# GLOBAL ERROR HANDLER
 # ============================================================
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    print(f"ERROR: {exc}")
+    print("SERVER ERROR:", repr(exc))
 
     return JSONResponse(
         status_code=500,
         content={
             "success": False,
-            "message": "An internal server error occurred. Please try again later.",
+            "message": "An internal server error occurred.",
         },
     )
 
 
 # ============================================================
-# API Routes
+# API ROUTES
 # ============================================================
 
 app.include_router(
@@ -75,7 +74,7 @@ app.include_router(
 
 
 # ============================================================
-# Health Check
+# HEALTH CHECK
 # ============================================================
 
 @app.get("/health")
@@ -83,4 +82,16 @@ def health_check():
     return {
         "status": "healthy",
         "project": settings.PROJECT_NAME,
+    }
+
+
+# ============================================================
+# ROOT
+# ============================================================
+
+@app.get("/")
+def root():
+    return {
+        "status": "online",
+        "message": "College Society Recruitment Platform API",
     }
