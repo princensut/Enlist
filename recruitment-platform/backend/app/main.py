@@ -12,12 +12,18 @@ app = FastAPI(
 )
 
 # CORS Configuration
+allowed_origins = [
+settings.FRONTEND_URL.rstrip("/"),
+"https://enlist-frontend.vercel.app",
+"http://localhost:5173",
+]
+
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[settings.FRONTEND_URL],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+CORSMiddleware,
+allow_origins=allowed_origins,
+allow_credentials=True,
+allow_methods=[""],
+allow_headers=[""],
 )
 
 # Exception Handler to protect sensitive internal stack traces
