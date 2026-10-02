@@ -1,8 +1,8 @@
-const API_BASE = "http://localhost:5000/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
-export async function apiFetch(endpoint, options = {}) {
+export async function apiRequest(endpoint, options = {}) {
   const defaultHeaders = {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   };
 
   const config = {
@@ -11,18 +11,38 @@ export async function apiFetch(endpoint, options = {}) {
       ...defaultHeaders,
       ...options.headers,
     },
-    credentials: "include", // Send HTTP-only session cookies
+    credentials: 'include', // Crucial for sending/receiving HttpOnly cookies
   };
 
-  const response = await fetch(`${API_BASE}${endpoint}`, config);
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+    
+    // Handle CSV download directly
+    if (options.responseType === 'blob') {
+      if (!response.ok) throw new Error('Failed to download file');
+      return await response.blob();
+    }
 
-  if (response.status === 204) return null;
+    const data = await response.json().catch(() => ({}));
 
-  const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+  let errorMsg = 'An unexpected error occurred';
 
-  if (!response.ok) {
-    throw new Error(data.detail || data.message || "An error occurred on the server.");
+  if (typeof data.detail === 'string') {
+    errorMsg = data.detail;
+  } else if (Array.isArray(data.detail)) {
+    errorMsg = data.detail
+      .map((err) => err.msg || 'Validation error')
+      .join(', ');
+  } else if (typeof data.message === 'string') {
+    errorMsg = data.message;
   }
 
-  return data;
+  throw new Error(errorMsg);
+}
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
 }
