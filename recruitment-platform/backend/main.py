@@ -34,8 +34,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://enlist-frontend.vercel.app",
-        "https://enlist-frontend-git-main-princekumar1821006-7883s-projects.vercel.app/",
-        "https://enlist-frontend-67ussghy1-princekumar1821006-7883s-projects.vercel.app/",
+        "https://enlist-frontend-git-main-princekumar1821006-7883s-projects.vercel.app",
+        "https://enlist-frontend-67ussghy1-princekumar1821006-7883s-projects.vercel.app",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
     ],
