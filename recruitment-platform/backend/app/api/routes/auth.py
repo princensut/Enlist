@@ -17,17 +17,22 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 def set_auth_cookie(response: Response, token: str):
-    is_production = settings.ENVIRONMENT.lower() == "production"
+    # Frontend and API live on different vercel.app subdomains (cross-site),
+    # so the cookie must be SameSite=None; Secure. localhost stays lax.
+    is_local = settings.ENVIRONMENT.lower() in ("development", "dev", "local")
 
     response.set_cookie(
         key="access_token",
         value=token,
         httponly=True,
-        samesite="none" if is_production else "lax",
-        secure=is_production,
+        samesite="lax" if is_local else "none",
+        secure=not is_local,
         max_age=3600 * 24,
         path="/",
     )
+    # Also expose the token so the SPA can send it as a Bearer header when
+    # the browser blocks third-party cookies.
+    response.headers["X-Access-Token"] = token
 
 
 @router.post(
@@ -79,6 +84,8 @@ def logout(response: Response):
     response.delete_cookie(
         key="access_token",
         path="/",
+        samesite="none",
+        secure=True,
     )
 
     return MessageResponse(

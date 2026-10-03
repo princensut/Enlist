@@ -30,7 +30,7 @@ def seed_sample_data():
                 deadline=datetime.now(timezone.utc) + timedelta(days=7),
                 eligibility="Open to all years",
                 is_active=True,
-                contactEmail="cs@college.edu"
+                contact_email="cs@college.edu"
             ),
             Society(
                 name="Robotics Society",
@@ -39,7 +39,7 @@ def seed_sample_data():
                 deadline=datetime.now(timezone.utc) - timedelta(days=2), # Expired deadline
                 eligibility="Engineering students",
                 is_active=True,
-                contactEmail="robotics@college.edu"
+                contact_email="robotics@college.edu"
             ),
             Society(
                 name="Debating League",
@@ -48,7 +48,7 @@ def seed_sample_data():
                 deadline=datetime.now(timezone.utc) + timedelta(days=14),
                 eligibility="Open to all students",
                 is_active=True,
-                contactEmail="debate@college.edu"
+                contact_email="debate@college.edu"
             )
         ]
 

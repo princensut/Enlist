@@ -1,9 +1,13 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://enlist-five.vercel.app/api';
 
 export async function apiRequest(endpoint, options = {}) {
   const defaultHeaders = {
     'Content-Type': 'application/json',
   };
+
+  // Fallback for browsers that block third-party cookies
+  const savedToken = localStorage.getItem('access_token');
+  if (savedToken) defaultHeaders.Authorization = `Bearer ${savedToken}`;
 
   const config = {
     ...options,
@@ -16,6 +20,11 @@ export async function apiRequest(endpoint, options = {}) {
 
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+
+    const newToken = response.headers.get('X-Access-Token');
+    if (newToken) localStorage.setItem('access_token', newToken);
+    if (endpoint === '/auth/logout') localStorage.removeItem('access_token');
+    if (response.status === 401 && endpoint !== '/auth/login') localStorage.removeItem('access_token');
     
     // Handle CSV download directly
     if (options.responseType === 'blob') {
