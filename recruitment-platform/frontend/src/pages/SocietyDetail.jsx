@@ -12,6 +12,9 @@ export default function SocietyDetail() {
   const [society, setSociety] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [rollNumber, setRollNumber] = useState('');
+  const [email, setEmail] = useState(user?.email || '');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [statement, setStatement] = useState('');
   const [toast, setToast] = useState(null);
 
