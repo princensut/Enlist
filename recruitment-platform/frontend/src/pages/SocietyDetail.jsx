@@ -78,16 +78,18 @@ export default function SocietyDetail() {
     setSubmitting(true);
 
     try {
-      await apiRequest('/applications', {
-  method: 'POST',
-  body: JSON.stringify({
-    society_id: parseInt(id, 10),
-    roll_number: rollNumber.trim(),
-    email: email.trim(),
-    mobile_number: mobileNumber.trim(),
-    submission_text: statement.trim(),
-  }),
-});
+            await apiRequest('/applications', {
+        method: 'POST',
+        body: JSON.stringify({
+          society_id: id,
+          answers: {
+            roll_number: rollNumber.trim(),
+            email: email.trim(),
+            mobile_number: mobileNumber.trim(),
+            why_join: statement.trim(),
+          },
+        }),
+      });
      
 
       setToast({
