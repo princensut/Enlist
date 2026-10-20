@@ -78,7 +78,7 @@ export default function SocietyDetail() {
     setSubmitting(true);
 
     try {
-      await apiRequest('/api/applications', {
+      await apiRequest('/applications', {
   method: 'POST',
   body: JSON.stringify({
     society_id: parseInt(id, 10),
